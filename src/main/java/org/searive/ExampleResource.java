@@ -16,7 +16,6 @@ public class ExampleResource {
         return "hello";
     }
 
-
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/greeting/{name}")
