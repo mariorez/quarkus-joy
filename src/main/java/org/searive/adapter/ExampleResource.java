@@ -1,8 +1,13 @@
-package org.searive;
+package org.searive.adapter;
 
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
+import org.searive.application.service.PersonService;
 
+import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -16,6 +21,9 @@ import static javax.ws.rs.core.Response.Status.CREATED;
 @Path("/hello")
 @Transactional
 public class ExampleResource {
+
+    @Inject
+    private PersonService personService;
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -34,19 +42,17 @@ public class ExampleResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/person")
-    public Response create(PersonInput input) {
+    public Response create(@Valid PersonInput input) {
 
-        var person = new Person();
-        person.name = input.name;
-        person.age = input.age;
-
-        person.persist();
+        personService.create(input.name, input.age);
 
         return Response.status(CREATED).build();
     }
 
     static class PersonInput {
+        @NotBlank
         public String name;
+        @Positive
         public Integer age;
     }
 }
