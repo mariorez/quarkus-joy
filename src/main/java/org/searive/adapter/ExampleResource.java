@@ -1,6 +1,7 @@
 package org.searive.adapter;
 
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
+import org.searive.application.domain.Person;
 import org.searive.application.service.PersonService;
 
 import javax.inject.Inject;
@@ -15,6 +16,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 import static javax.ws.rs.core.Response.Status.CREATED;
 
@@ -47,6 +49,14 @@ public class ExampleResource {
         personService.create(input.name, input.age);
 
         return Response.status(CREATED).build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/persons")
+    public List<Person> list() {
+
+        return personService.getAll();
     }
 
     static class PersonInput {

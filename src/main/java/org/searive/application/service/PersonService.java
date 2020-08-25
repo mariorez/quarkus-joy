@@ -3,6 +3,7 @@ package org.searive.application.service;
 import org.searive.application.domain.Person;
 
 import javax.enterprise.context.ApplicationScoped;
+import java.util.List;
 
 @ApplicationScoped
 public class PersonService {
@@ -14,5 +15,11 @@ public class PersonService {
         person.age = age;
 
         person.persist();
+    }
+
+    public List<Person> getAll() {
+
+        var person = new Person();
+        return person.listAll();
     }
 }
