@@ -24,7 +24,7 @@ public class PersonService {
                 .onItem().transform(pgRowSet -> pgRowSet.iterator().next().getLong("id"));
     }
 
-    public Multi<Person> findAll() {
+    public Multi<Person> getAll() {
 
         return client
                 .query("SELECT id, name, age FROM person ORDER BY name ASC")

@@ -57,9 +57,9 @@ public class ExampleResource {
     @Produces(MediaType.SERVER_SENT_EVENTS)
     @SseElementType(MediaType.APPLICATION_JSON)
     @Path("/persons")
-    public Multi<Person> findAll() {
+    public Multi<Person> list() {
 
-        return personService.findAll();
+        return personService.getAll();
     }
 
     static class PersonInput {
