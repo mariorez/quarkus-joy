@@ -1,6 +1,10 @@
 package org.searive.adapter;
 
+import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
+import org.jboss.resteasy.annotations.SseElementType;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
+import org.searive.application.domain.Person;
 import org.searive.application.service.PersonService;
 
 import javax.inject.Inject;
@@ -15,8 +19,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import static javax.ws.rs.core.Response.Status.CREATED;
+import java.net.URI;
 
 @Path("/hello")
 @Transactional
@@ -41,12 +44,22 @@ public class ExampleResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/person")
-    public Response create(@Valid PersonInput input) {
+    @Path("/persons")
+    public Uni<Response> create(@Valid PersonInput input) {
 
-        personService.create(input.name, input.age);
+        return personService
+                .create(input.name, input.age)
+                .onItem().transform(id -> URI.create("/hello/persons/" + id))
+                .onItem().transform(uri -> Response.created(uri).build());
+    }
 
-        return Response.status(CREATED).build();
+    @GET
+    @Produces(MediaType.SERVER_SENT_EVENTS)
+    @SseElementType(MediaType.APPLICATION_JSON)
+    @Path("/persons")
+    public Multi<Person> findAll() {
+
+        return personService.findAll();
     }
 
     static class PersonInput {

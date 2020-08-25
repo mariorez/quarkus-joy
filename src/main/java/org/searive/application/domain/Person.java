@@ -1,11 +1,8 @@
 package org.searive.application.domain;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntity;
+public class Person {
 
-import javax.persistence.Entity;
-
-@Entity
-public class Person extends PanacheEntity {
+    public Long id;
     public String name;
     public Integer age;
 }
