@@ -22,7 +22,6 @@ import javax.ws.rs.core.Response;
 import java.net.URI;
 
 @Path("/hello")
-@Transactional
 public class ExampleResource {
 
     @Inject
