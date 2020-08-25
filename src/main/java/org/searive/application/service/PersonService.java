@@ -8,20 +8,31 @@ import io.vertx.mutiny.sqlclient.Tuple;
 import org.searive.application.domain.Person;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.util.stream.StreamSupport;
 
 @ApplicationScoped
 public class PersonService {
 
-    @Inject
     PgPool client;
+
+    public PersonService(PgPool client) {
+        this.client = client;
+
+        client.query("DROP TABLE IF EXISTS person")
+                .execute()
+                .flatMap(r -> client
+                        .query("CREATE TABLE person (id SERIAL PRIMARY KEY, name TEXT NOT NULL, age INTEGER NOT NULL)")
+                        .execute())
+                .await()
+                .indefinitely();
+    }
 
     public Uni<Long> create(String name, Integer age) {
 
         return client.preparedQuery("INSERT INTO person (name, age) VALUES ($1, $2) RETURNING (id)")
                 .execute(Tuple.of(name, age))
-                .onItem().transform(pgRowSet -> pgRowSet.iterator().next().getLong("id"));
+                .onItem()
+                .transform(pgRowSet -> pgRowSet.iterator().next().getLong("id"));
     }
 
     public Multi<Person> getAll() {
