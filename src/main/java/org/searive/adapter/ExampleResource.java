@@ -41,7 +41,7 @@ public class ExampleResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/person")
+    @Path("/persons")
     public Response create(@Valid PersonInput input) {
 
         personService.create(input.name, input.age);
