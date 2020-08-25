@@ -33,7 +33,7 @@ public class ExampleResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/person")
+    @Path("/persons")
     public Response create(PersonInput input) {
 
         var person = new Person();
