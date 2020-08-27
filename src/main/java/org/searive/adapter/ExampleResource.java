@@ -3,12 +3,10 @@ package org.searive.adapter;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import org.jboss.resteasy.annotations.SseElementType;
-import org.jboss.resteasy.annotations.jaxrs.PathParam;
 import org.searive.application.domain.Person;
 import org.searive.application.service.PersonService;
 
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
@@ -26,19 +24,6 @@ public class ExampleResource {
 
     @Inject
     private PersonService personService;
-
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
-        return "hello";
-    }
-
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    @Path("/greeting/{name}")
-    public String greeting(@PathParam String name) {
-        return "hello: " + name;
-    }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

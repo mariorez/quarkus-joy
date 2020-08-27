@@ -8,6 +8,7 @@ import io.vertx.mutiny.sqlclient.Tuple;
 import org.searive.application.domain.Person;
 
 import javax.enterprise.context.ApplicationScoped;
+import java.time.Duration;
 import java.util.stream.StreamSupport;
 
 @ApplicationScoped
@@ -44,6 +45,9 @@ public class PersonService {
                 .transformToMulti(set ->
                         Multi.createFrom().items(() -> StreamSupport.stream(set.spliterator(), false)))
                 .onItem()
+                /*.transformToUni(i -> Uni.createFrom().item(i).onItem().delayIt().by(Duration.ofMillis(1000)))
+                .concatenate()
+                .onItem()*/
                 .transform(this::from);
     }
 
