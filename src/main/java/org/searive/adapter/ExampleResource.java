@@ -1,6 +1,5 @@
 package org.searive.adapter;
 
-import org.jboss.resteasy.annotations.jaxrs.PathParam;
 import org.searive.application.domain.Person;
 import org.searive.application.service.PersonService;
 
@@ -26,19 +25,6 @@ public class ExampleResource {
 
     @Inject
     private PersonService personService;
-
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
-        return "hello";
-    }
-
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    @Path("/greeting/{name}")
-    public String greeting(@PathParam String name) {
-        return "hello: " + name;
-    }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
