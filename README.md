@@ -1,30 +1,32 @@
-# quarkus-joy project
+# Quarkus Joy
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+## Usando VisualVM no container Docker
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+https://visualvm.github.io/ 
 
-## Running the application in dev mode
+### 01 Build da imagem Docker
 
-You can run your application in dev mode that enables live coding using:
 ```
-./mvnw quarkus:dev
+docker build -f src/main/docker/Dockerfile.fast-jar -t quarkus/quarkus-joy-jvm .
 ```
 
-## Packaging and running the application
+### 02 Executanto imagem Docker com parametros para possibilitar a monitoria com VisualVM 
 
-The application can be packaged using `./mvnw package`.
-It produces the `quarkus-joy-1.0.0-SNAPSHOT-runner.jar` file in the `/target` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/lib` directory.
+```
+docker run -i --rm \
+    --memory=1000m \
+    --cpus=2 \
+    -e QUARKUS_LAUNCH_DEVMODE=true \
+    -e "JAVA_TOOL_OPTIONS=-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9010 -Dcom.sun.management.jmxremote.rmi.port=9010 -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false" \
+    -p 8080:8080 \
+    -p 9010:9010 \
+    quarkus/quarkus-joy-jvm
+```
 
-The application is now runnable using `java -jar target/quarkus-joy-1.0.0-SNAPSHOT-runner.jar`.
+### 03 Conectando VisualVM com o imagem Docker
 
-## Creating a native executable
+Menu: File -> Add JMX connection...
 
-You can create a native executable using: `./mvnw package -Pnative`.
+Inserir no campo "Connection": `localhost:9010`
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: `./mvnw package -Pnative -Dquarkus.native.container-build=true`.
-
-You can then execute your native executable with: `./target/quarkus-joy-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/building-native-image.
+![VisualVM add JMX connection](visulavm-add-jmx.png) 
